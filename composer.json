@@ -1,0 +1,17 @@
+{
+  "name": "apility/ftp",
+  "description":
+    "Implements a PHP class abstraction over the traditional PHP ftp client",
+  "type": "library",
+  "authors": [
+    {
+      "name": "thomas-alrek",
+      "email": "thomas@apility.no"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Apility\\": "src/"
+    }
+  }
+}
