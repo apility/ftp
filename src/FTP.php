@@ -23,6 +23,7 @@ class FTP
         if (!$this->connection = ftp_connect($host, $port, $timeout)) {
             throw new Exception('Unable to establish connection to ' . $host . ':' . $port);
         }
+        ftp_pasv($this->connection, true);
         if (!is_null($user) && !is_null($password)) {
             $this->login($user, $password);
         }
@@ -75,8 +76,11 @@ class FTP
             fwrite($file, $data);
         }
         $path = is_null($path) ? $name : $path;
-        if (!ftp_put($this->connection, $path, $file, $mode)) {
-            throw new Exception('Upload to ' . $path . 'failed');
+        if (!ftp_put($this->connection, $path, stream_get_meta_data($file)['uri'], $mode)) {
+            ftp_pasv($this->connection, false);
+            if (!ftp_put($this->connection, $path, stream_get_meta_data($file)['uri'], $mode)) {
+                throw new Exception('Upload to ' . $path . 'failed');
+            }
         };
         fclose($file);
         return true;
